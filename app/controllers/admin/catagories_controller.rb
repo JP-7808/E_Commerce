@@ -1,4 +1,4 @@
-class Admin::CatagoriesController < ApplicationController
+class Admin::CatagoriesController < AdminController
   before_action :set_admin_catagory, only: %i[ show edit update destroy ]
 
   # GET /admin/catagories or /admin/catagories.json
@@ -25,7 +25,7 @@ class Admin::CatagoriesController < ApplicationController
 
     respond_to do |format|
       if @admin_catagory.save
-        format.html { redirect_to @admin_catagory, notice: "Catagory was successfully created." }
+        format.html { redirect_to [:admin, @admin_catagory], notice: "Catagory was successfully created." }
         format.json { render :show, status: :created, location: @admin_catagory }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -38,7 +38,7 @@ class Admin::CatagoriesController < ApplicationController
   def update
     respond_to do |format|
       if @admin_catagory.update(admin_catagory_params)
-        format.html { redirect_to @admin_catagory, notice: "Catagory was successfully updated." }
+        format.html { redirect_to [:admin, @admin_catagory], notice: "Catagory was successfully updated." }
         format.json { render :show, status: :ok, location: @admin_catagory }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -60,11 +60,11 @@ class Admin::CatagoriesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_admin_catagory
-      @admin_catagory = Catagory.find(params.expect(:id))
+      @admin_catagory = Catagory.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.
     def admin_catagory_params
-      params.expect(admin_catagory: [ :name, :description ])
+      params.require(:catagory).permit(:name, :description, :image)
     end
 end
